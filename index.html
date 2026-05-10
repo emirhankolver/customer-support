@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Chat - ReceiveSMS Support</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { height: 100%; overflow: hidden; background: #fff; }
+
+      /* Force Libredesk widget to full-screen */
+      .libredesk-widget,
+      .libredesk-widget-container,
+      .libredesk-frame,
+      [class*="libredesk"] iframe,
+      [id*="libredesk"] iframe,
+      iframe[src*="libredesk"],
+      iframe[src*="support.turnaworks"] {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        min-width: 100% !important;
+        min-height: 100% !important;
+        border-radius: 0 !important;
+        position: fixed !important;
+        inset: 0 !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        z-index: 1 !important;
+      }
+
+      /* Hide launcher button */
+      .libredesk-launcher,
+      [class*="launcher"],
+      [class*="Launcher"],
+      button[class*="launch"],
+      div[class*="launch"] {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        visibility: hidden !important;
+      }
+
+      /* Ensure widget is visible */
+      .libredesk-widget,
+      [class*="libredesk"] {
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+    </style>
+</head>
+<body>
+
+<script>
+  window.LibredeskSettings = {
+    baseURL: 'https://support.turnaworks.com',
+    inboxID: 'b185b422-afea-4daa-8b2f-05a20c23ee2a'
+  };
+</script>
+<script async src="https://support.turnaworks.com/widget.js"></script>
+
+<script>
+  function init() {
+    if (window.Libredesk && typeof window.Libredesk.show === 'function') {
+      window.Libredesk.show();
+
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get('token');
+
+      if (token) {
+        window.Libredesk.setUser(token);
+      }
+    }
+  }
+
+  const interval = setInterval(() => {
+    if (window.Libredesk) {
+      init();
+      clearInterval(interval);
+    }
+  }, 200);
+
+  window.addEventListener('load', () => setTimeout(init, 1000));
+</script>
+
+</body>
+</html>
