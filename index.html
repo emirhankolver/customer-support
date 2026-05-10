@@ -63,27 +63,31 @@
 <script async src="https://support.turnaworks.com/widget.js"></script>
 
 <script>
-  function init() {
-    if (window.Libredesk && typeof window.Libredesk.show === 'function') {
-      window.Libredesk.show();
+    function init() {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
 
-      const params = new URLSearchParams(window.location.search);
-      const token = params.get('token');
+        // ❌ Do nothing if token is missing
+        if (!token) {
+            // optionally hide/remove widget script behavior entirely
+            console.log("No token, Libredesk disabled");
+            return;
+        }
 
-      if (token) {
-        window.Libredesk.setUser(token);
-      }
+        if (window.Libredesk && typeof window.Libredesk.show === 'function') {
+            window.Libredesk.show();
+            window.Libredesk.setUser(token);
+        }
     }
-  }
 
-  const interval = setInterval(() => {
-    if (window.Libredesk) {
-      init();
-      clearInterval(interval);
-    }
-  }, 200);
+    const interval = setInterval(() => {
+        if (window.Libredesk) {
+            init();
+            clearInterval(interval);
+        }
+    }, 200);
 
-  window.addEventListener('load', () => setTimeout(init, 1000));
+    window.addEventListener('load', () => setTimeout(init, 1000));
 </script>
 
 </body>
